@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  studentId  String       @id
+  email      String       @unique
+  password   String
+  semester   String
+  department String
+  gender     String
+  events     Attendance[]
+}
+
+model Admin {
+  studentId String @id
+}
+
+model Event {
+  eventId       String       @id @default(uuid())
+  title         String
+  description   String
+  startDatetime DateTime
+  duration      String
+  leaves        Leave[]
+  students      Attendance[]
+}
+
+model Attendance {
+  Student   Student  @relation(fields: [studentId], references: [studentId])
+  studentId String
+  Event     Event    @relation(fields: [eventId], references: [eventId])
+  eventId   String
+  status    String   @default("absent")
+  timestamp DateTime
+
+  @@id([studentId, eventId])
+}
+
+model Leave {
+  leaveId String  @id @default(uuid())
+  Event   Event?  @relation(fields: [eventId], references: [eventId])
+  eventId String?
+  status  String  @default("pending")
+  subject String
+  message String
+}
