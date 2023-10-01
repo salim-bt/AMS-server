@@ -25,7 +25,8 @@ router.post(
         body('gender').custom(isValidGender),
         body('department').custom(isValidDepartment),
         body('semester').custom(isValidSemester),
-        body('password').isLength({min: 8})
+        body('password').isLength({min: 5}),
+        body('name').isAlpha()
     ], register)
 
 module.exports = router;

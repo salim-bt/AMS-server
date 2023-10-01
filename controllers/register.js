@@ -2,6 +2,7 @@ const {validationResult} = require("express-validator");
 const {hash} = require("bcrypt");
 const {db} = require("../utils/db");
 const register = async (req, res, next) => {
+    console.log(req.body)
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({errors: errors.array()});
